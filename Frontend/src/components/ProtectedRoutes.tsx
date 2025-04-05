@@ -22,7 +22,7 @@ const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ children }) => {
       return;
     }
     try {
-      const res = await api.post("/refresh-token", {
+      const res = await api.post("/api/token/refresh/", {
         refresh: refreshToken,
       });
       if (res.status === 200) {
@@ -66,7 +66,7 @@ const ProtectedRoutes: React.FC<ProtectedRoutesProps> = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return isAuthenticated ? <>{children}</> : <Navigate to="/ola" />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoutes;
