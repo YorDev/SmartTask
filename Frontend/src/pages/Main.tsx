@@ -4,6 +4,20 @@ import api from "../api/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Configuración de Axios para incluir el token JWT
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token"); // Obtén el token del almacenamiento local
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`; // Agrega el token al encabezado
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 const Sidebar = () => {
   return (
     <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full md:w-1/5 flex flex-col justify-between">
@@ -55,8 +69,17 @@ const WelcomeMessage = () => {
   );
 };
 
+interface TaskType {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+  due_date: string;
+}
+
 const TaskList = () => {
-  const [task, setTask] = useState<Task[]>([]);
+  const [task, setTask] = useState<TaskType[]>([]);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [user, setUser] = useState("");
@@ -74,9 +97,6 @@ const TaskList = () => {
   }, []);
 
   const getTasks = () => {
-    // const res = await api.get("/api/tasks");
-    // console.log(res);
-
     api
       .get("/api/tasks/")
       .then((res) => res.data)
@@ -84,18 +104,16 @@ const TaskList = () => {
         setTask(data);
         console.log(data);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        if (err.response && err.response.status === 403) {
+          alert(
+            "No tienes permiso para acceder a las tareas. Verifica tu autenticación."
+          );
+        } else {
+          alert(err);
+        }
+      });
   };
-
-  interface Task {
-    id: number;
-    content: string;
-    title: string;
-    description: string;
-    status: string;
-    priority: string;
-    due_date: string;
-  }
 
   const deleteTask = (id: number): void => {
     api
