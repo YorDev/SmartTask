@@ -18,7 +18,8 @@ class Task(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el usuario
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     due_date = models.DateTimeField()
@@ -33,7 +34,7 @@ class Task(models.Model):
 
 class AIInteraction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ai_interactions")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ai_interactions")
     user_input = models.TextField()
     ai_response = models.TextField()
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="ai_interactions")
