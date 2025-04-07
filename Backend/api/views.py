@@ -5,8 +5,6 @@ from django.contrib.auth.models import User
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.exceptions import PermissionDenied
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -17,12 +15,9 @@ class CreateUserView(generics.CreateAPIView):
 class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, BasicAuthentication]  # Aseguramos autenticación
     
     def get_queryset(self):
         user = self.request.user
-        if not user.is_authenticated:  # Verificamos si el usuario está autenticado
-            raise PermissionDenied("Usuario no autenticado.")  # Lanzamos un error explícito
         return Task.objects.filter(user=user)
     
     def perform_create(self, serializer):

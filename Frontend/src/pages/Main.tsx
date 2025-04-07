@@ -4,20 +4,6 @@ import api from "../api/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Configuración de Axios para incluir el token JWT
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("access_token"); // Obtén el token del almacenamiento local
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Agrega el token al encabezado
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 const Sidebar = () => {
   return (
     <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full md:w-1/5 flex flex-col justify-between">
@@ -97,6 +83,9 @@ const TaskList = () => {
   }, []);
 
   const getTasks = () => {
+    // const res = await api.get("/api/tasks");
+    // console.log(res);
+
     api
       .get("/api/tasks/")
       .then((res) => res.data)
@@ -104,15 +93,7 @@ const TaskList = () => {
         setTask(data);
         console.log(data);
       })
-      .catch((err) => {
-        if (err.response && err.response.status === 403) {
-          alert(
-            "No tienes permiso para acceder a las tareas. Verifica tu autenticación."
-          );
-        } else {
-          alert(err);
-        }
-      });
+      .catch((err) => alert(err));
   };
 
   const deleteTask = (id: number): void => {
@@ -172,17 +153,6 @@ const TaskList = () => {
           </div>
           <h2>Create a Task</h2>
           <form onSubmit={createTask}>
-            <label htmlFor="user">User:</label>
-            <br />
-            <input
-              type="integer"
-              id="user"
-              name="user"
-              required
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-            />
-            <br />
             <label htmlFor="title">Title:</label>
             <br />
             <input
