@@ -59,6 +59,15 @@ const TaskList = () => {
   const [task, setTask] = useState<Task[]>([]);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const [user, setUser] = useState("");
+  const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [category, setCategory] = useState("");
+  const [priority, setPriority] = useState("");
+  const [status, setStatus] = useState("");
+
+  const PRIORITY_CHOICES = ["Baja", "Media", "Alta"];
+  const STATUS_CHOICES = ["Pendiente", "En progreso", "Completada"];
 
   useEffect(() => {
     getTasks();
@@ -104,10 +113,18 @@ const TaskList = () => {
   const createTask = (e: CreateTaskEvent): void => {
     e.preventDefault();
     api
-      .post("/api/tasks/", { content, title })
+      .post("/api/tasks/", {
+        user,
+        title,
+        description,
+        due_date: dueDate,
+        category,
+        priority,
+        status,
+      })
       .then((res) => {
-        if (res.status === 201) alert("Note created!");
-        else alert("Failed to make note.");
+        if (res.status === 201) alert("Task created!");
+        else alert("Failed to create task.");
         getTasks();
       })
       .catch((err: unknown) => alert(err));
@@ -135,8 +152,19 @@ const TaskList = () => {
               <Task task={task} onDelete={deleteTask} key={task.id} />
             ))}
           </div>
-          <h2>Create a Note</h2>
+          <h2>Create a Task</h2>
           <form onSubmit={createTask}>
+            <label htmlFor="user">User:</label>
+            <br />
+            <input
+              type="integer"
+              id="user"
+              name="user"
+              required
+              onChange={(e) => setUser(e.target.value)}
+              value={user}
+            />
+            <br />
             <label htmlFor="title">Title:</label>
             <br />
             <input
@@ -147,15 +175,70 @@ const TaskList = () => {
               onChange={(e) => setTitle(e.target.value)}
               value={title}
             />
-            <label htmlFor="content">Content:</label>
+            <br />
+            <label htmlFor="description">Description:</label>
             <br />
             <textarea
-              id="content"
-              name="content"
+              id="description"
+              name="description"
               required
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
             ></textarea>
+            <br />
+            <label htmlFor="due_date">Due Date:</label>
+            <br />
+            <input
+              type="date"
+              id="due_date"
+              name="due_date"
+              required
+              onChange={(e) => setDueDate(e.target.value)}
+              value={dueDate}
+            />
+            <br />
+            <label htmlFor="category">Category:</label>
+            <br />
+            <input
+              type="text"
+              id="category"
+              name="category"
+              required
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
+            />
+            <br />
+            <label htmlFor="priority">Priority:</label>
+            <br />
+            <select
+              id="priority"
+              name="priority"
+              required
+              onChange={(e) => setPriority(e.target.value)}
+              value={priority}
+            >
+              {PRIORITY_CHOICES.map((choice) => (
+                <option key={choice} value={choice}>
+                  {choice}
+                </option>
+              ))}
+            </select>
+            <br />
+            <label htmlFor="status">Status:</label>
+            <br />
+            <select
+              id="status"
+              name="status"
+              required
+              onChange={(e) => setStatus(e.target.value)}
+              value={status}
+            >
+              {STATUS_CHOICES.map((choice) => (
+                <option key={choice} value={choice}>
+                  {choice}
+                </option>
+              ))}
+            </select>
             <br />
             <input type="submit" value="Submit"></input>
           </form>
