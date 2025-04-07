@@ -64,15 +64,18 @@ const TaskList = () => {
     getTasks();
   }, []);
 
-  const getTasks = () => {
-    api
-      .get("/api/tasks/")
-      .then((res) => res.data)
-      .then((data) => {
-        setTask(data);
-        console.log(data);
-      })
-      .catch((err) => alert(err));
+  const getTasks = async () => {
+    const res = await api.get("/api/tasks");
+    console.log(res);
+
+    // api
+    //   .get("/api/tasks/")
+    //   .then((res) => res.data)
+    //   .then((data) => {
+    //     setTask(data);
+    //     console.log(data);
+    //   })
+    //   .catch((err) => alert(err));
   };
 
   interface Task {

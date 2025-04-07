@@ -15,7 +15,7 @@ class CreateUserView(generics.CreateAPIView):
 class TaskListCreateView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get_queryset(self):
         user = self.request.user
