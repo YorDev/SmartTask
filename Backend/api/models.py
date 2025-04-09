@@ -17,7 +17,6 @@ class Task(models.Model):
         ('Completada', 'Completada'),
     ]
 
-    id = models.IntegerField(primary_key=True, default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el usuario
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)

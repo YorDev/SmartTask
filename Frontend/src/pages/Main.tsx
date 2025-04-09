@@ -120,6 +120,7 @@ const TaskList = () => {
         category,
         priority,
         status,
+        // No enviar el campo `id`.
       })
       .then((res) => {
         if (res.status === 201) alert("Task created!");
