@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-p2f$#qxstagtmb=^t_v#t(i^^og#j3prr_+2)6fsjvosl+ktyb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
