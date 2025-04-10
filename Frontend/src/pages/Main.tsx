@@ -44,7 +44,7 @@ const WelcomeMessage = () => {
     <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full lg:min-w-[500px]">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Welcome, Name!</h1>
+          <h1 className="text-2xl font-bold">Welcome, {User.displayName}!</h1>
           <p className="text-gray-400 text-sm">What we gon do today?</p>
         </div>
         <button className="w-10 h-10 rounded-full hover:bg-gray-700 flex items-center justify-center">
@@ -98,7 +98,7 @@ const TaskList = () => {
 
   const deleteTask = (id: number): void => {
     api
-      .delete(`/api/tasks/delete/${id}/`)
+      .delete(`/api/task/delete/${id}/`)
       .then((res) => {
         if (res.status === 204) alert("Note deleted!");
         else alert("Failed to delete note.");
@@ -147,7 +147,6 @@ const TaskList = () => {
         </div>
         <div>
           <div>
-            <h2>Notes</h2>
             {task.map((task) => (
               <Task task={task} onDelete={deleteTask} key={task.id} />
             ))}
@@ -239,7 +238,7 @@ const TaskList = () => {
 
 const AiAssistant = () => {
   return (
-    <div className="bg-gray-900 text-white rounded-lg shadow-md p-5 w-full md:w-1/5 flex flex-col">
+    <div className="bg-gray-900 text-white rounded-lg shadow-md p-5 w-full md:w-1/4 flex flex-col">
       <div className="mb-6 flex items-center gap-2">
         <div className="font-bold text-lg">AI Assist</div>
         <span className="text-yellow-400 text-lg">✦</span>
@@ -249,7 +248,7 @@ const AiAssistant = () => {
       </p>
       <div className="flex-1 overflow-y-auto">
         <div className="bg-gray-800 p-4 rounded-lg mb-3">
-          <p className="text-xs text-gray-400 mb-1">Hi, Name</p>
+          <p className="text-xs text-gray-400 mb-1">Hi, {User.displayName}</p>
           <p className="font-medium text-sm">How can I help u?</p>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -17,6 +16,7 @@ class Task(models.Model):
         ('Completada', 'Completada'),
     ]
 
+    id = models.AutoField(primary_key=True)  # Cambiado a AutoField
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el usuario
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -31,7 +31,7 @@ class Task(models.Model):
         return self.title
 
 class AIInteraction(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True)  # Cambiado a AutoField
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="ai_interactions")
     user_input = models.TextField()
     ai_response = models.TextField()
