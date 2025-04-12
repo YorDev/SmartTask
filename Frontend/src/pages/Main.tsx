@@ -47,7 +47,12 @@ const WelcomeMessage = () => {
           <h1 className="text-2xl font-bold">Welcome, {User.displayName}!</h1>
           <p className="text-gray-400 text-sm">What we gon do today?</p>
         </div>
-        <button className="w-10 h-10 rounded-full hover:bg-gray-700 flex items-center justify-center">
+        <button
+          className="w-10 h-10 rounded-full hover:bg-gray-700 flex items-center justify-center"
+          onClick={() => {
+            window.location.href = "/logout";
+          }}
+        >
           <User />
         </button>
       </div>
@@ -237,6 +242,36 @@ const TaskList = () => {
 };
 
 const AiAssistant = () => {
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
+    []
+  );
+  const [input, setInput] = useState("");
+
+  const handleSendMessage = async () => {
+    if (!input.trim()) return;
+
+    // Agregar el mensaje del usuario
+    const userMessage = { sender: "user", text: input };
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      // Consumir la API de ChatGPT
+      const response = await api.post("/api/chatgpt/", { prompt: input });
+      const aiResponse = { sender: "ai", text: response.data.response };
+
+      setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Error al comunicarse con la API de ChatGPT:", error);
+      const errorMessage = {
+        sender: "ai",
+        text: "Lo siento, no pude procesar tu solicitud.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
+
+    setInput(""); // Limpiar el campo de entrada
+  };
+
   return (
     <div className="bg-gray-900 text-white rounded-lg shadow-md p-5 w-full md:w-1/4 flex flex-col">
       <div className="mb-6 flex items-center gap-2">
@@ -244,21 +279,38 @@ const AiAssistant = () => {
         <span className="text-yellow-400 text-lg">✦</span>
       </div>
       <p className="text-xs text-gray-400 mb-6">
-        I can help u with whatever u need!
+        I can help u with task creation, editing, deletion, and recommendations!
       </p>
       <div className="flex-1 overflow-y-auto">
-        <div className="bg-gray-800 p-4 rounded-lg mb-3">
-          <p className="text-xs text-gray-400 mb-1">Hi, {User.displayName}</p>
-          <p className="font-medium text-sm">How can I help u?</p>
-        </div>
+        {messages.map((message, index) => (
+          <div
+            key={index}
+            className={`p-4 rounded-lg mb-3 ${
+              message.sender === "user"
+                ? "bg-gray-700 text-right"
+                : "bg-gray-800"
+            }`}
+          >
+            <p className="text-xs text-gray-400 mb-1">
+              {message.sender === "user" ? "You" : "AI"}
+            </p>
+            <p className="font-medium text-sm">{message.text}</p>
+          </div>
+        ))}
       </div>
       <div className="mt-4 relative">
         <input
           type="text"
           placeholder="Write Something..."
           className="w-full p-3 pr-10 border border-gray-700 rounded focus:ring-1 focus:ring-primary-300 text-sm bg-gray-800 text-white"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
         />
-        <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary-500">
+        <button
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary-500"
+          onClick={handleSendMessage}
+        >
           <span className="material-symbols-outlined">send</span>
         </button>
       </div>

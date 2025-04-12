@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for Backend project.
 
@@ -136,3 +138,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyCk4ocZbG7XflX-9vbHGDXS7PTZR2eXBKI")
