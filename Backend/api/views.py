@@ -67,7 +67,7 @@ class ChatGPTView(APIView):
                     "- priority (string: 'Alta', 'Media' o 'Baja')\n"
                     "- status (string: 'Pendiente', 'Completada')\n"
                     "- description (string)\n"
-                    "- due_date (formato YYYY-MM-DD HH:MM:SS)\n"
+                    "- due_date (formato YYYY-MM-DD HH:MM:SS, que el año por default sea 2025)\n"
                     "- category (string)\n"
                     "Devuelve solo el JSON sin explicaciones ni comentarios."
                 )
@@ -157,7 +157,7 @@ class ChatGPTView(APIView):
                     return Response({"response": f"No se encontró la tarea con título '{title}'."})
 
 
-            elif "recomendar tareas" in prompt.lower():
+            elif "recom" in prompt.lower():
                 tasks = Task.objects.filter(user=request.user, status="Pendiente")
                 if not tasks.exists():
                     return Response({"response": "No tienes tareas pendientes para recomendar."})

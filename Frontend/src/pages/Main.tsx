@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full md:w-1/5 flex flex-col justify-between">
+    <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full md:w-1/5 flex flex-col justify-between max-h-screen">
       <div>
         <div className="flex items-center gap-3 mb-8">
           <div className="font-bold text-lg tracking-wide">SMARTTASK</div>
@@ -80,32 +80,29 @@ const TaskList = () => {
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
 
-  const PRIORITY_CHOICES = ["Baja", "Media", "Alta"];
-  const STATUS_CHOICES = ["Pendiente", "En progreso", "Completada"];
+  const PRIORITY_CHOICES = ["", "Baja", "Media", "Alta"];
+  const STATUS_CHOICES = ["", "Pendiente", "En progreso", "Completada"];
 
   useEffect(() => {
     getTasks();
   }, []);
 
-  const getTasks = () => {
-    // const res = await api.get("/api/tasks");
-    // console.log(res);
-
-    api
-      .get("/api/tasks/")
-      .then((res) => res.data)
-      .then((data) => {
-        setTask(data);
-        console.log(data);
-      })
-      .catch((err) => alert(err));
+  const getTasks = async () => {
+    try {
+      const res = await api.get("/api/tasks/");
+      const data = res.data;
+      setTask(data);
+      console.log(data);
+    } catch (err) {
+      alert(err);
+    }
   };
 
   const deleteTask = (id: number): void => {
     api
       .delete(`/api/task/delete/${id}/`)
       .then((res) => {
-        if (res.status === 204) alert("Note deleted!");
+        if (res.status === 204) console.log("Note deleted!");
         else alert("Failed to delete note.");
         getTasks();
       })
@@ -125,10 +122,9 @@ const TaskList = () => {
         category,
         priority,
         status,
-        // No enviar el campo `id`.
       })
       .then((res) => {
-        if (res.status === 201) alert("Task created!");
+        if (res.status === 201) console.log("Task created!");
         else alert("Failed to create task.");
         getTasks();
       })
@@ -150,7 +146,7 @@ const TaskList = () => {
             </button>
           </div>
         </div>
-        <div>
+        <div className="overflow-auto scrollbar-hide max-h-[657px] min-h-[657px]">
           <div>
             {task.map((task) => (
               <Task task={task} onDelete={deleteTask} key={task.id} />
@@ -242,24 +238,37 @@ const TaskList = () => {
 };
 
 const AiAssistant = () => {
+  const [task, setTask] = useState<TaskType[]>([]);
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
   const [input, setInput] = useState("");
 
+  const getTasks = async () => {
+    try {
+      const res = await api.get("/api/tasks/");
+      const data = res.data;
+      setTask(data);
+      console.log(data);
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
-    // Agregar el mensaje del usuario
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      // Consumir la API de ChatGPT
       const response = await api.post("/api/chatgpt/", { prompt: input });
       const aiResponse = { sender: "ai", text: response.data.response };
 
       setMessages((prev) => [...prev, aiResponse]);
+
+      // Refrescar las tareas después de crear una tarea con OpenAI
+      await getTasks();
     } catch (error) {
       console.error("Error al comunicarse con la API de ChatGPT:", error);
       const errorMessage = {
@@ -269,18 +278,16 @@ const AiAssistant = () => {
       setMessages((prev) => [...prev, errorMessage]);
     }
 
-    setInput(""); // Limpiar el campo de entrada
+    setInput("");
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-lg shadow-md p-5 w-full md:w-1/4 flex flex-col">
+    <div className="bg-gray-900 text-white rounded-lg shadow-md p-5 w-full md:w-1/4 flex flex-col max-h-screen overflow-hidden">
       <div className="mb-6 flex items-center gap-2">
         <div className="font-bold text-lg">AI Assist</div>
         <span className="text-yellow-400 text-lg">✦</span>
       </div>
-      <p className="text-xs text-gray-400 mb-6">
-        I can help u with task creation, editing, deletion, and recommendations!
-      </p>
+      <p className="text-xs text-gray-400 mb-6">How can i help u?</p>
       <div className="flex-1 overflow-y-auto">
         {messages.map((message, index) => (
           <div
@@ -320,7 +327,7 @@ const AiAssistant = () => {
 
 const TestPage = () => {
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-950 p-4 text-white gap-4">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-950 p-4 text-white gap-4 max-h-screen">
       <Sidebar />
       <div className="flex flex-col gap-4 w-full">
         <WelcomeMessage />
