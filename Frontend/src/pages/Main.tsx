@@ -40,11 +40,28 @@ const Sidebar = () => {
 };
 
 const WelcomeMessage = () => {
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const res = await api.get("/api/getuser");
+        const data = res.data;
+        setUserName(data.username);
+        console.log(data);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserName();
+  }, []);
+
   return (
     <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full lg:min-w-[500px]">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Welcome, {User.displayName}!</h1>
+          <h1 className="text-2xl font-bold">Welcome, User{userName}!</h1>
           <p className="text-gray-400 text-sm">What we gon do today?</p>
         </div>
         <button
