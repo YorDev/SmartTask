@@ -19,6 +19,14 @@ class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+    
+class UserListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        return User.objects.filter(id=user.id)
 
 class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
@@ -120,7 +128,7 @@ class ChatGPTView(APIView):
                 openai.base_url = "https://models.inference.ai.azure.com/"
 
                 system_msg = (
-                    "A partir del siguiente mensaje, devuelve solo el título exacto de la tarea que se desea eliminar en formato JSON:\n"
+                    "A partir del siguiente mensaje, devuelve solo el título de la tarea que se desea eliminar en formato JSON:\n"
                     "{ \"title\": \"...\" }\n"
                     "No incluyas texto adicional."
                 )
