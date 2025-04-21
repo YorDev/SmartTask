@@ -13,25 +13,25 @@ interface Task {
 }
 
 const Task: React.FC<Task> = ({ task, onDelete }) => {
-  const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+  const formatDateTime = (dateTime: string) => {
+    const date = new Date(dateTime);
+    return date.toLocaleString("es-ES", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
   };
 
   return (
     <div className="task-container">
       <li className="flex items-center justify-between p-3 bg-gray-900 rounded hover:bg-gray-800 transition-colors">
         <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            className="w-4 h-4 rounded border-neutral-600 bg-neutral-900 text-neutral-300 cursor-pointer"
-          />
           <div>
             <div className="font-medium text-sm text-neutral-200">
               {task.title}
             </div>
-            <div className="text-sm text-neutral-400">{task.due_date}</div>
+            <div className="text-sm text-neutral-400">
+              {formatDateTime(task.due_date)}
+            </div>
           </div>
         </div>
         <button className="p-1 hover:bg-neutral-600 rounded transition-colors">
