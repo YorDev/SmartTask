@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { Trash } from "lucide-react";
 
 interface Task {
   task: {
@@ -12,7 +12,7 @@ interface Task {
   onDelete: (id: number) => void;
 }
 
-const Task: React.FC<Task> = ({ task, onDelete }) => {
+const Task: React.FC<Task> = ({ task }) => {
   const formatDateTime = (dateTime: string) => {
     const date = new Date(dateTime);
     return date.toLocaleString("es-ES", {
@@ -22,28 +22,18 @@ const Task: React.FC<Task> = ({ task, onDelete }) => {
   };
 
   return (
-    <div className="task-container">
-      <li className="flex items-center justify-between p-3 bg-gray-900 rounded hover:bg-gray-800 transition-colors">
-        <div className="flex items-center gap-2">
-          <div>
-            <div className="font-medium text-sm text-neutral-200">
-              {task.title}
-            </div>
-            <div className="text-sm text-neutral-400">
-              {formatDateTime(task.due_date)}
-            </div>
+    <li className="flex items-center justify-between cursor-pointer p-3 bg-transparent hover:bg-opacity-50 rounded transition-colors">
+      <div className="flex items-center gap-2">
+        <div>
+          <div className="font-medium text-sm text-neutral-200">
+            {task.title}
+          </div>
+          <div className="text-sm text-neutral-400">
+            {formatDateTime(task.due_date)}
           </div>
         </div>
-        <button className="p-1 hover:bg-neutral-600 rounded transition-colors">
-          <button
-            className="material-symbols-outlined text-neutral-500 text-sm"
-            onClick={() => onDelete(task.id)}
-          >
-            delete
-          </button>
-        </button>
-      </li>
-    </div>
+      </div>
+    </li>
   );
 };
 
