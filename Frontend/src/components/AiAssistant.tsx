@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import api from "../api/api";
 import { useTaskContext } from "../context/TaskContext";
+import { useTheme } from "../context/ThemeContext";
 
 interface TaskType {
   category: string | number | readonly string[] | undefined;
@@ -15,11 +16,15 @@ interface TaskType {
 
 const AiAssistant = () => {
   const [task, setTask] = useState<TaskType[]>([]);
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([
+    {
+      sender: "ai",
+      text: "¡Hola! Soy tu asistente virtual. Puedo ayudarte a gestionar tus tareas. ¿En qué puedo ayudarte hoy?",
+    },
+  ]);
   const [input, setInput] = useState("");
   const { refreshTasks } = useTaskContext();
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     getTasks();
@@ -63,23 +68,41 @@ const AiAssistant = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-lg shadow-md p-5 w-full md:w-1/4 flex flex-col max-h-screen overflow-hidden">
+    <div
+      className={`${
+        isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+      } rounded-lg shadow-md p-5 w-full md:w-1/4 flex flex-col max-h-screen overflow-hidden`}
+    >
       <div className="mb-6 flex items-center gap-2">
         <div className="font-bold text-lg">AI Assist</div>
         <span className="text-yellow-400 text-lg">✦</span>
       </div>
-      <p className="text-xs text-gray-400 mb-6">How can i help u?</p>
+      <p
+        className={`text-xs ${
+          isDarkMode ? "text-gray-400" : "text-gray-500"
+        } mb-6`}
+      >
+        Crear, Eliminar o Recomendaciones
+      </p>
       <div className="flex-1 overflow-y-auto">
         {messages.map((message, index) => (
           <div
             key={index}
             className={`p-4 rounded-lg mb-3 ${
               message.sender === "user"
-                ? "bg-gray-700 text-right"
-                : "bg-gray-800"
-            }`}
+                ? isDarkMode
+                  ? "bg-gray-700"
+                  : "bg-gray-100"
+                : isDarkMode
+                ? "bg-gray-800"
+                : "bg-gray-200"
+            } ${message.sender === "user" ? "text-right" : ""}`}
           >
-            <p className="text-xs text-gray-400 mb-1">
+            <p
+              className={`text-xs ${
+                isDarkMode ? "text-gray-400" : "text-gray-500"
+              } mb-1`}
+            >
               {message.sender === "user" ? "You" : "AI"}
             </p>
             <p className="font-medium text-sm">{message.text}</p>
@@ -90,13 +113,21 @@ const AiAssistant = () => {
         <input
           type="text"
           placeholder="Write Something..."
-          className="w-full p-3 pr-10 border border-gray-700 rounded focus:ring-1 focus:ring-primary-300 text-sm bg-gray-800 text-white"
+          className={`w-full p-3 pr-10 border ${
+            isDarkMode
+              ? "border-gray-700 bg-gray-800 text-white"
+              : "border-gray-200 bg-gray-100 text-gray-900"
+          } rounded focus:ring-1 focus:ring-primary-300 text-sm`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
         />
         <button
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-primary-500"
+          className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
+            isDarkMode
+              ? "text-gray-400 hover:text-gray-300"
+              : "text-gray-600 hover:text-gray-800"
+          }`}
           onClick={handleSendMessage}
         >
           <span className="material-symbols-outlined">send</span>

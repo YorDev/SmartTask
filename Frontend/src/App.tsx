@@ -6,7 +6,9 @@ import ProtectedRoutes from "./components/ProtectedRoutes.tsx";
 import Register from "./pages/Register.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Landing from "./pages/landing.tsx";
 import { TaskProvider } from "./context/TaskContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function Logout() {
   localStorage.clear();
@@ -19,25 +21,28 @@ function RegisterAndLogout() {
 
 function App() {
   return (
-    <TaskProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoutes>
-                <Main />
-              </ProtectedRoutes>
-            }
-          />
-          <Route path="/test" element={<Testpage />} />
-          <Route path="/Register" element={<Register />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/Logout" element={<Logout />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TaskProvider>
+    <ThemeProvider>
+      <TaskProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoutes>
+                  <Main />
+                </ProtectedRoutes>
+              }
+            />
+            <Route path="/test" element={<Testpage />} />
+            <Route path="/Register" element={<Register />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Logout" element={<Logout />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TaskProvider>
+    </ThemeProvider>
   );
 }
 

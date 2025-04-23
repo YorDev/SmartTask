@@ -4,6 +4,7 @@ import api from "../api/api";
 import Task from "./Task";
 import { Trash } from "lucide-react";
 import { useTaskContext } from "../context/TaskContext";
+import { useTheme } from "../context/ThemeContext";
 
 interface TaskType {
   category: string | number | readonly string[] | undefined;
@@ -29,6 +30,7 @@ const TaskList = () => {
   const [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const { setRefreshTasks } = useTaskContext();
+  const { isDarkMode } = useTheme();
 
   const PRIORITY_CHOICES = ["", "Baja", "Media", "Alta"];
   const STATUS_CHOICES = ["", "Pendiente", "En progreso", "Completada"];
@@ -113,18 +115,32 @@ const TaskList = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-lg shadow-sm p-5 w-full lg:min-w-[500px]">
+    <div
+      className={`${
+        isDarkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+      } rounded-lg shadow-sm p-5 w-full lg:min-w-[500px]`}
+    >
       <div>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Tasks</h2>
           <div className="flex gap-2">
             <button
-              className="px-4 py-1.5 border border-gray-700 rounded-md bg-gray-800 hover:bg-gray-700 transition-colors text-sm"
+              className={`px-4 py-1.5 border ${
+                isDarkMode
+                  ? "border-gray-700 bg-gray-800 hover:bg-gray-700"
+                  : "border-gray-200 bg-gray-100 hover:bg-gray-200"
+              } rounded-md transition-colors text-sm`}
               onClick={() => setShowModal(true)}
             >
               Add Task
             </button>
-            <button className="px-4 py-1.5 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors flex items-center gap-1 text-sm">
+            <button
+              className={`px-4 py-1.5 ${
+                isDarkMode
+                  ? "bg-gray-700 hover:bg-gray-600"
+                  : "bg-gray-900 hover:bg-gray-800"
+              } text-white rounded-md transition-colors flex items-center gap-1 text-sm`}
+            >
               <span className="text-yellow-400 text-xs">✦</span>
               AI Assist
             </button>
@@ -133,7 +149,11 @@ const TaskList = () => {
         {/* Ventana emergente */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <div
+              className={`${
+                isDarkMode ? "bg-gray-800" : "bg-white"
+              } p-6 rounded-lg shadow-lg w-full max-w-md`}
+            >
               <h2 className="text-lg font-bold mb-4">Create a Task</h2>
               <form
                 onSubmit={(e) => {
@@ -150,7 +170,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setTitle(e.target.value)}
                   value={title}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="description">Description:</label>
                 <br />
@@ -160,7 +184,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setDescription(e.target.value)}
                   value={description}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 ></textarea>
                 <label htmlFor="due_date">Due Date:</label>
                 <br />
@@ -171,7 +199,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setDueDate(e.target.value)}
                   value={dueDate}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="due_time">Due Time:</label>
                 <br />
@@ -182,7 +214,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setDueTime(e.target.value)}
                   value={dueTime}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="category">Category:</label>
                 <br />
@@ -193,7 +229,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setCategory(e.target.value)}
                   value={category}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="priority">Priority:</label>
                 <br />
@@ -203,7 +243,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setPriority(e.target.value)}
                   value={priority}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 >
                   {PRIORITY_CHOICES.map((choice) => (
                     <option key={choice} value={choice}>
@@ -219,7 +263,11 @@ const TaskList = () => {
                   required
                   onChange={(e) => setStatus(e.target.value)}
                   value={status}
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 >
                   {STATUS_CHOICES.map((choice) => (
                     <option key={choice} value={choice}>
@@ -230,14 +278,18 @@ const TaskList = () => {
                 <div className="flex justify-end gap-2">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
+                    className={`px-4 py-2 ${
+                      isDarkMode
+                        ? "bg-gray-600 hover:bg-gray-500"
+                        : "bg-gray-200 hover:bg-gray-300"
+                    } rounded`}
                     onClick={() => setShowModal(false)}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
                   >
                     Submit
                   </button>
@@ -258,19 +310,17 @@ const TaskList = () => {
                       onClick={() => handleTaskClick(task)}
                       className={`
                         ${
-                          task.status === "Pendiente"
-                            ? "bg-yellow-800 hover:bg-yellow-900"
-                            : ""
-                        }
-                        ${
-                          task.status === "En progreso"
-                            ? "bg-green-800 hover:bg-green-900"
-                            : ""
-                        }
-                        ${
-                          task.status === "Completada"
-                            ? "bg-blue-800 hover:bg-blue-900"
-                            : ""
+                          isDarkMode
+                            ? task.status === "Pendiente"
+                              ? "bg-yellow-800 hover:bg-yellow-900"
+                              : task.status === "En progreso"
+                              ? "bg-green-800 hover:bg-green-900"
+                              : "bg-blue-800 hover:bg-blue-900"
+                            : task.status === "Pendiente"
+                            ? "bg-yellow-100 hover:bg-yellow-200"
+                            : task.status === "En progreso"
+                            ? "bg-green-100 hover:bg-green-200"
+                            : "bg-blue-100 hover:bg-blue-200"
                         }
                         rounded-lg transition-colors
                       `}
@@ -286,7 +336,11 @@ const TaskList = () => {
         {/* Ventana emergente para editar tarea */}
         {showEditModal && selectedTask && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <div
+              className={`${
+                isDarkMode ? "bg-gray-800" : "bg-white"
+              } p-6 rounded-lg shadow-lg w-full max-w-md`}
+            >
               <h2 className="text-lg font-bold mb-4">Edit Task</h2>
               <form onSubmit={updateTask}>
                 <label htmlFor="title">Title:</label>
@@ -300,7 +354,11 @@ const TaskList = () => {
                   onChange={(e) =>
                     setSelectedTask({ ...selectedTask, title: e.target.value })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="description">Description:</label>
                 <br />
@@ -315,7 +373,11 @@ const TaskList = () => {
                       description: e.target.value,
                     })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 ></textarea>
                 <label htmlFor="due_date">Due Date:</label>
                 <br />
@@ -333,7 +395,11 @@ const TaskList = () => {
                       }`,
                     })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="due_time">Due Time:</label>
                 <br />
@@ -351,7 +417,11 @@ const TaskList = () => {
                       }`,
                     })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="category">Category:</label>
                 <br />
@@ -367,7 +437,11 @@ const TaskList = () => {
                       category: e.target.value,
                     })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 />
                 <label htmlFor="priority">Priority:</label>
                 <br />
@@ -382,7 +456,11 @@ const TaskList = () => {
                       priority: e.target.value,
                     })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 >
                   {PRIORITY_CHOICES.map((choice) => (
                     <option key={choice} value={choice}>
@@ -400,7 +478,11 @@ const TaskList = () => {
                   onChange={(e) =>
                     setSelectedTask({ ...selectedTask, status: e.target.value })
                   }
-                  className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
+                  className={`w-full p-2 mb-3 rounded ${
+                    isDarkMode
+                      ? "bg-gray-700 text-white"
+                      : "bg-gray-100 text-gray-900"
+                  }`}
                 >
                   {STATUS_CHOICES.map((choice) => (
                     <option key={choice} value={choice}>
@@ -411,7 +493,7 @@ const TaskList = () => {
                 <div className="flex justify-between gap-2">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
+                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white"
                     onClick={() => {
                       deleteTask(selectedTask.id);
                       setShowEditModal(false);
@@ -423,14 +505,18 @@ const TaskList = () => {
                   <div className="flex gap-2">
                     <button
                       type="button"
-                      className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500"
+                      className={`px-4 py-2 ${
+                        isDarkMode
+                          ? "bg-gray-600 hover:bg-gray-500"
+                          : "bg-gray-200 hover:bg-gray-300"
+                      } rounded`}
                       onClick={() => setShowEditModal(false)}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-500"
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
                     >
                       Save
                     </button>
