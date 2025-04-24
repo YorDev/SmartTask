@@ -30,13 +30,13 @@ const WelcomeMessage = () => {
     >
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Welcome, {userName}!</h1>
+          <h1 className="text-2xl font-bold">Welcome{userName}!</h1>
           <p
             className={`${
               isDarkMode ? "text-gray-400" : "text-gray-500"
             } text-sm`}
           >
-            What we gon do today?
+            What we gonna do today?
           </p>
         </div>
         <button

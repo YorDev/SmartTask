@@ -312,10 +312,10 @@ const TaskList = () => {
                         ${
                           isDarkMode
                             ? task.status === "Pendiente"
-                              ? "bg-yellow-800 hover:bg-yellow-900"
+                              ? "bg-yellow-600 hover:bg-yellow-700"
                               : task.status === "En progreso"
-                              ? "bg-green-800 hover:bg-green-900"
-                              : "bg-blue-800 hover:bg-blue-900"
+                              ? "bg-green-600 hover:bg-green-700"
+                              : "bg-blue-600 hover:bg-blue-700"
                             : task.status === "Pendiente"
                             ? "bg-yellow-100 hover:bg-yellow-200"
                             : task.status === "En progreso"
@@ -365,7 +365,6 @@ const TaskList = () => {
                 <textarea
                   id="description"
                   name="description"
-                  required
                   value={selectedTask.description}
                   onChange={(e) =>
                     setSelectedTask({
@@ -429,7 +428,6 @@ const TaskList = () => {
                   type="text"
                   id="category"
                   name="category"
-                  required
                   value={selectedTask.category}
                   onChange={(e) =>
                     setSelectedTask({
