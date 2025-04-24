@@ -1,6 +1,9 @@
 import os
+<<<<<<< HEAD
 from dotenv import load_dotenv
 load_dotenv()
+=======
+>>>>>>> d7c6c70215bf74e63b102a18a480d7efc3cbae23
 
 """
 Django settings for Backend project.
@@ -141,4 +144,8 @@ REST_FRAMEWORK = {
     ],
 }
 
+<<<<<<< HEAD
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+=======
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+>>>>>>> d7c6c70215bf74e63b102a18a480d7efc3cbae23
