@@ -41,7 +41,6 @@ class TaskListCreateView(generics.ListCreateAPIView):
             serializer.save(user=self.request.user)
         else:
             print(serializer.errors)
-<<<<<<< HEAD
             
 class TaskUpdateView(generics.UpdateAPIView):
     serializer_class = TaskSerializer
@@ -50,8 +49,6 @@ class TaskUpdateView(generics.UpdateAPIView):
     def get_queryset(self):
         user = self.request.user
         return Task.objects.filter(user=user)
-=======
->>>>>>> d7c6c70215bf74e63b102a18a480d7efc3cbae23
    
    
 class TaskDelete(generics.DestroyAPIView):
@@ -176,11 +173,7 @@ class ChatGPTView(APIView):
                     return Response({"response": f"No se encontró la tarea con título '{title}'."})
 
 
-<<<<<<< HEAD
             elif "recomiendame" in prompt.lower():
-=======
-            elif "recom" in prompt.lower():
->>>>>>> d7c6c70215bf74e63b102a18a480d7efc3cbae23
                 tasks = Task.objects.filter(user=request.user, status="Pendiente")
                 if not tasks.exists():
                     return Response({"response": "No tienes tareas pendientes para recomendar."})
